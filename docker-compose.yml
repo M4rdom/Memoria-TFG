@@ -1,3 +1,31 @@
-version: '3.8'  # Versión de Docker Compose
+version: '3.8'
 
 services:
+  fronted:
+    build:
+      context: ./frontend
+      dockerfile: dockerfile
+    container_name: frontend
+  
+  repository-manager:
+    build:
+      context: ./Repository-Manager
+      dockerfile: dockerfile
+    container_name: repository-manager
+
+  uvengine-resolver:
+    build:
+      context: ./UVEngine-Resolver
+      dockerfile: dockerfile
+    container_name: uvengine-resolver
+    depends_on:
+      - repository-manager
+  
+  nginx-reverse-proxy:
+    build:
+      context: ./Nginx-Reverse-Proxy
+      dockerfile: dockerfile
+    container_name: nginx-reverse-proxy
+    ports:
+      - "80:80"
+
